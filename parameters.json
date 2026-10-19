@@ -1,0 +1,122 @@
+{
+    "elliptical_fins": {},
+    "environment": {
+        "base_pressure": null,
+        "base_temperature": null,
+        "date": null,
+        "elevation": 0.0,
+        "geodetic_method": "spherical",
+        "latitude": 28.61,
+        "longitude": -80.6,
+        "wind_average": 2.0,
+        "wind_turbulence": 0.1
+    },
+    "flight": {
+        "heading": 90.0,
+        "inclination": 90.0,
+        "rail_length": 3.6576
+    },
+    "id": {
+        "comment": null,
+        "designer": "Matthew Fetterman (Updated by Brandon Schultz)",
+        "filepath": "rocket.ork",
+        "rocket_name": "Rocket"
+    },
+    "motors": {
+        "center_of_dry_mass_position": 0,
+        "coordinate_system_orientation": "nozzle_to_combustion_chamber",
+        "dry_inertia": [
+            0,
+            0,
+            0
+        ],
+        "dry_mass": 0,
+        "grain_density": 1040.8769885324384,
+        "grain_initial_height": 0.231,
+        "grain_initial_inner_radius": 0.0135,
+        "grain_number": 1,
+        "grain_outer_radius": 0.027,
+        "grain_separation": 0,
+        "grains_center_of_mass_position": 0,
+        "nozzle_position": -0.1155,
+        "nozzle_radius": 0.02025,
+        "position": 1.123111380145279,
+        "throat_radius": 0.0135,
+        "thrust_source": "./subscale/thrust_source.csv"
+    },
+    "nosecones": {
+        "base_radius": 0.033528,
+        "kind": "ellipsoid",
+        "length": 0.10159999999999997,
+        "name": "Nose Cone",
+        "position": 0.0
+    },
+    "parachutes": {
+        "0": {
+            "area": 1.1674540318406346,
+            "cd": 1.55,
+            "cds": 1.8095537493529836,
+            "deploy_altitude": 200.0,
+            "deploy_delay": 0.0,
+            "deploy_event": "altitude",
+            "name": "Elliptical Parachute [Cd 1.55 (7.3 oz) 37.2 in^3]"
+        },
+        "1": {
+            "area": 0.29186350796015864,
+            "cd": 1.55,
+            "cds": 0.4523884373382459,
+            "deploy_altitude": null,
+            "deploy_delay": 0.0,
+            "deploy_event": "apogee",
+            "name": "Elliptical Parachute [Cd 1.55 (2.2 oz) 12.2 in^3]"
+        }
+    },
+    "rail_buttons": {
+        "angular_position": 0.0,
+        "distance": 0.9166859999999999,
+        "lower_position": 1.5770859999999998,
+        "name": "Rail Button",
+        "upper_position": 0.6603999999999999
+    },
+    "rocket": {
+        "center_of_mass_without_propellant": 0.654,
+        "coordinate_system_orientation": "nose_to_tail",
+        "drag_curve": "./subscale/drag_curve.csv",
+        "inertia": [
+            0.003,
+            0.003,
+            0.776
+        ],
+        "mass": 5.458,
+        "radius": 0.033528
+    },
+    "stored_results": {
+        "burnout_stability_margin": 3.711,
+        "flight_time": 92.41,
+        "ground_hit_velocity": 6.53,
+        "launch_rod_velocity": 24.192,
+        "max_acceleration": 85.182,
+        "max_altitude": 858.466,
+        "max_mach": 0.38,
+        "max_stability_margin": 3.75,
+        "max_thrust": 545.793,
+        "max_velocity": 129.221,
+        "min_stability_margin": 0.0,
+        "time_to_apogee": 13.708
+    },
+    "tails": {},
+    "trapezoidal_fins": {
+        "0": {
+            "cant_angle": 0.0,
+            "name": "Trapezoidal Fin Set",
+            "number": 4,
+            "position": 0.9905999999999998,
+            "root_chord": 0.2286,
+            "section": "square",
+            "span": 0.067056,
+            "sweep_angle": null,
+            "sweep_length": 0.07619999999999999,
+            "tip_chord": 0.15239999999999995
+        }
+    }
+}
