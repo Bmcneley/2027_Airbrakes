@@ -25,14 +25,26 @@ from rocketpy import Environment, Flight, Function, Rocket, SolidMotor
 # ----------------------------------------------------------------------------
 
 
+# Folders (relative to parameters.json) that hold drag_curve.csv / thrust_source.csv
+CSV_FOLDERS = ["airbrakes_csv", "subscale"]
+
+
 def find_file(path_str, base_dir):
     """ork2json writes paths relative to where it was run; try a few places."""
     p = Path(path_str)
-    candidates = [p, base_dir / p, base_dir / p.name, base_dir / "subscale" / p.name]
+    candidates = [p, base_dir / p, base_dir / p.name]
+    for folder in CSV_FOLDERS:
+        candidates.append(base_dir / folder / p.name)
     for c in candidates:
         if c.exists():
             return c
-    raise FileNotFoundError(f"Could not find {path_str} (looked in {base_dir})")
+    # last resort: any file with that name in a subfolder of base_dir
+    found = sorted(base_dir.glob(f"*/{p.name}"))
+    if found:
+        return found[0]
+    raise FileNotFoundError(
+        f"Could not find {p.name}. Looked next to parameters.json and in "
+        f"{', '.join(CSV_FOLDERS)} under {base_dir}")
 
 
 def load_curve(path):
@@ -56,6 +68,18 @@ def fn_array(func):
 
 
 def build_and_fly(params, base_dir):
+    env, rocket, motor, thrust_raw, drag_raw, drag_clean = build_rocket(params, base_dir)
+    fl_p = params["flight"]
+    flight = Flight(
+        rocket=rocket, environment=env, rail_length=fl_p["rail_length"],
+        inclination=min(fl_p["inclination"], 89.99), heading=fl_p["heading"],
+        max_time=600,
+    )
+    return env, rocket, motor, flight, thrust_raw, drag_raw, drag_clean
+
+
+def build_rocket(params, base_dir, verbose=True):
+    """Environment + motor + rocket from parameters.json (no flight yet)."""
     env_p, rkt_p, mot_p = params["environment"], params["rocket"], params["motors"]
 
     # --- Environment: standard atmosphere + constant wind (OpenRocket default style)
@@ -98,8 +122,9 @@ def build_and_fly(params, base_dir):
     # ork2json sometimes writes the large (pitch/yaw) value last -> fix it.
     inertia = list(rkt_p["inertia"])
     if inertia[2] > inertia[0]:
-        print(f"[note] Inertia looked swapped {inertia}; using "
-              f"{[inertia[2], inertia[2], inertia[0]]}")
+        if verbose:
+                print(f"[note] Inertia looked swapped {inertia}; using "
+                  f"{[inertia[2], inertia[2], inertia[0]]}")
         inertia = [inertia[2], inertia[2], inertia[0]]
 
     rocket = Rocket(
@@ -143,14 +168,7 @@ def build_and_fly(params, base_dir):
                              cd_s=chute["cds"], trigger=trigger, sampling_rate=105,
                              lag=chute.get("deploy_delay") or 0.0)
 
-    # --- Flight (exactly 90 deg can be numerically awkward; 89.99 is equivalent)
-    fl_p = params["flight"]
-    flight = Flight(
-        rocket=rocket, environment=env, rail_length=fl_p["rail_length"],
-        inclination=min(fl_p["inclination"], 89.99), heading=fl_p["heading"],
-        max_time=600,
-    )
-    return env, rocket, motor, flight, thrust_raw, drag_raw, drag_clean
+    return env, rocket, motor, thrust_raw, drag_raw, drag_clean
 
 
 # ----------------------------------------------------------------------------
